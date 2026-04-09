@@ -1,0 +1,20 @@
+{
+  "name": "interview-task-tests",
+  "version": "1.0.0",
+  "description": "Playwright tests for all Interview Task solutions",
+  "scripts": {
+    "test": "playwright test",
+    "test:task1": "playwright test tests/task1.spec.js",
+    "test:task2": "playwright test tests/task2.spec.js",
+    "test:task3": "playwright test tests/task3.spec.js",
+    "test:report": "playwright show-report"
+  },
+  "dependencies": {
+    "better-sqlite3": "^9.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0"
+  }
+}

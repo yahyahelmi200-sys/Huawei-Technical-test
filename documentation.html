@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Huawei Technical Test — Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─────────────────────────────────────────
+       DESIGN TOKENS
+    ───────────────────────────────────────── */
+    :root {
+      /* Brand */
+      --red:          #CF0A2C;
+      --red-hover:    #A8081F;
+      --red-subtle:   #FBF0F2;
+      --red-border:   #F5C9CF;
+
+      /* Neutrals */
+      --bg:           #F4F4F6;
+      --surface:      #FFFFFF;
+      --surface-alt:  #FAFAFA;
+      --border:       #E4E4E7;
+      --border-strong:#C4C4CC;
+
+      /* Text */
+      --text-primary:   #111118;
+      --text-secondary: #52525C;
+      --text-muted:     #8B8B97;
+      --text-inverse:   #FFFFFF;
+
+      /* Sidebar */
+      --sidebar-bg:     #111118;
+      --sidebar-w:      248px;
+
+      /* Accents */
+      --blue:    #2563EB;
+      --green:   #16A34A;
+      --orange:  #EA580C;
+      --purple:  #7C3AED;
+
+      /* Typography */
+      --font:   'Inter', system-ui, sans-serif;
+      --mono:   'JetBrains Mono', 'Consolas', monospace;
+
+      /* Sizing */
+      --radius-sm: 6px;
+      --radius:    10px;
+      --radius-lg: 14px;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.05);
+      --shadow:    0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
+    }
+
+    /* ─────────────────────────────────────────
+       BASE
+    ───────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-primary);
+      background: var(--bg);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    ::selection { background: var(--red-subtle); color: var(--red); }
+
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--red); }
+
+    a { color: var(--red); text-decoration: none; }
+    a:hover { color: var(--red-hover); }
+
+    code {
+      font-family: var(--mono);
+      font-size: 12px;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 6px;
+      color: var(--red);
+    }
+
+    /* ─────────────────────────────────────────
+       SIDEBAR
+    ───────────────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-w);
+      min-width: var(--sidebar-w);
+      background: var(--sidebar-bg);
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 50;
+      overflow-y: auto;
+      border-right: 1px solid rgba(255,255,255,.06);
+    }
+
+    /* Logo */
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      background: var(--red);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-mark svg { width: 18px; height: 18px; }
+
+    .logo-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-inverse);
+      line-height: 1.3;
+    }
+
+    .logo-text span {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      color: rgba(255,255,255,.4);
+      letter-spacing: .3px;
+    }
+
+    /* Nav groups */
+    .nav-group { padding: 16px 12px 8px; }
+
+    .nav-group-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.25);
+      padding: 0 8px;
+      margin-bottom: 4px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      color: rgba(255,255,255,.5);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+      text-decoration: none;
+      position: relative;
+    }
+
+    .nav-item svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      opacity: .7;
+    }
+
+    .nav-item:hover {
+      background: rgba(255,255,255,.07);
+      color: rgba(255,255,255,.85);
+    }
+
+    .nav-item:hover svg { opacity: 1; }
+
+    .nav-item.active {
+      background: rgba(207,10,44,.18);
+      color: #FF8096;
+    }
+
+    .nav-item.active svg { opacity: 1; }
+
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 20px;
+      background: var(--red);
+      border-radius: 0 2px 2px 0;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      background: rgba(255,255,255,.1);
+      color: rgba(255,255,255,.4);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 7px;
+      border-radius: 10px;
+      font-family: var(--mono);
+    }
+
+    .nav-item.active .nav-badge {
+      background: rgba(207,10,44,.3);
+      color: #FF8096;
+    }
+
+    /* Sidebar footer */
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 16px 20px;
+      border-top: 1px solid rgba(255,255,255,.07);
+    }
+
+    .sidebar-footer-text {
+      font-size: 11px;
+      color: rgba(255,255,255,.2);
+      line-height: 1.5;
+    }
+
+    /* ─────────────────────────────────────────
+       MAIN CONTENT
+    ───────────────────────────────────────── */
+    .content {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* Top header bar */
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 40px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .topbar-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .topbar-breadcrumb svg { width: 14px; height: 14px; }
+    .topbar-breadcrumb strong { color: var(--text-primary); font-weight: 600; }
+
+    .topbar-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .meta-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    .meta-pill svg { width: 13px; height: 13px; }
+
+    .status-dot {
+      width: 7px; height: 7px;
+      background: var(--green);
+      border-radius: 50%;
+    }
+
+    /* Page body */
+    .page { padding: 40px; max-width: 920px; }
+
+    /* ─────────────────────────────────────────
+       SECTIONS
+    ───────────────────────────────────────── */
+    .section { margin-bottom: 64px; scroll-margin-top: 72px; }
+
+    .section-header { margin-bottom: 28px; }
+
+    .section-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .section-eyebrow-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -.3px;
+      line-height: 1.3;
+    }
+
+    .section-desc {
+      margin-top: 8px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      max-width: 600px;
+    }
+
+    /* ─────────────────────────────────────────
+       HERO BLOCK
+    ───────────────────────────────────────── */
+    .hero-block {
+      background: var(--sidebar-bg);
+      border-radius: var(--radius-lg);
+      padding: 48px 40px;
+      margin-bottom: 64px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.06);
+    }
+
+    .hero-block::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(207,10,44,.15), transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-block::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: 40%;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(207,10,44,.07), transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.4);
+      border: 1px solid rgba(255,255,255,.1);
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+    }
+
+    .hero-tag-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--red);
+    }
+
+    .hero-title {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--text-inverse);
+      letter-spacing: -.5px;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+
+    .hero-title .accent { color: var(--red); }
+
+    .hero-subtitle {
+      font-size: 15px;
+      color: rgba(255,255,255,.45);
+      max-width: 500px;
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      min-width: 100px;
+    }
+
+    .hero-stat-num {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-inverse);
+      font-family: var(--mono);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .hero-stat-num span { color: var(--red); }
+
+    .hero-stat-label {
+      font-size: 11px;
+      color: rgba(255,255,255,.35);
+      font-weight: 500;
+      letter-spacing: .3px;
+    }
+
+    /* ─────────────────────────────────────────
+       CARDS
+    ───────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-body { padding: 24px; }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    /* Task summary cards */
+    .task-card { overflow: hidden; }
+
+    .task-card-accent {
+      height: 3px;
+    }
+
+    .task-card-inner { padding: 20px; }
+
+    .task-card-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .task-icon {
+      width: 36px; height: 36px;
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .task-icon svg { width: 18px; height: 18px; }
+
+    .task-card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .task-card-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .task-card-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+
+    /* Tags */
+    .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 4px;
+      border: 1px solid;
+    }
+
+    /* Checklist */
+    .checklist { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .check {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: #DCFCE7;
+      border: 1px solid #86EFAC;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .check svg { width: 9px; height: 9px; color: #16A34A; }
+
+    /* ─────────────────────────────────────────
+       CODE BLOCKS
+    ───────────────────────────────────────── */
+    .code-wrap {
+      background: #0F0F14;
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      background: rgba(255,255,255,.02);
+    }
+
+    .code-header-dots { display: flex; gap: 6px; }
+    .code-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .code-dot-r { background: #FF5F57; }
+    .code-dot-y { background: #FEBC2E; }
+    .code-dot-g { background: #28C840; }
+
+    .code-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(255,255,255,.25);
+      letter-spacing: .5px;
+    }
+
+    .code-body {
+      padding: 20px;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      line-height: 1.75;
+      overflow-x: auto;
+      color: #CDD6F4;
+    }
+
+    .code-body .kw  { color: #CBA6F7; }
+    .code-body .fn  { color: #89B4FA; }
+    .code-body .str { color: #A6E3A1; }
+    .code-body .cm  { color: #585B70; font-style: italic; }
+    .code-body .num { color: #FAB387; }
+    .code-body .op  { color: #89DCEB; }
+    .code-body .var { color: #CDD6F4; }
+    .code-body .sql-kw { color: #89DCEB; font-weight: 500; }
+    .code-body .sql-fn { color: #F9E2AF; }
+    .code-body .sh-kw  { color: #CBA6F7; }
+    .code-body .sh-var { color: #FAB387; }
+    .code-body .sh-cmd { color: #89B4FA; }
+
+    /* ─────────────────────────────────────────
+       TABLES
+    ───────────────────────────────────────── */
+    .table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); }
+
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+    thead th {
+      background: var(--surface-alt);
+      padding: 10px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    tbody td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-primary);
+      vertical-align: middle;
+    }
+
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: var(--surface-alt); }
+
+    /* Method badges */
+    .method {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      min-width: 56px;
+      text-align: center;
+    }
+    .method-get    { background: #DBEAFE; color: #1E40AF; }
+    .method-post   { background: #DCFCE7; color: #166534; }
+    .method-delete { background: #FEE2E2; color: #991B1B; }
+
+    /* Position badges */
+    .pos-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    /* ─────────────────────────────────────────
+       CRON SCHEDULE
+    ───────────────────────────────────────── */
+    .cron-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .cron-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .cron-time {
+      font-family: var(--mono);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -1px;
+      margin-bottom: 4px;
+    }
+
+    .cron-time span { color: var(--red); }
+
+    .cron-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    /* ─────────────────────────────────────────
+       FILE TREE
+    ───────────────────────────────────────── */
+    .file-tree {
+      background: #0F0F14;
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: var(--radius);
+      padding: 24px;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      line-height: 2;
+    }
+
+    .ft-dir  { color: #89B4FA; font-weight: 600; }
+    .ft-js   { color: #F9E2AF; }
+    .ft-sh   { color: #A6E3A1; }
+    .ft-sql  { color: #89DCEB; }
+    .ft-html { color: #FAB387; }
+    .ft-bat  { color: #CBA6F7; }
+    .ft-json { color: #F38BA8; }
+    .ft-md   { color: #CDD6F4; }
+    .ft-dim  { color: #45475A; }
+
+    /* ─────────────────────────────────────────
+       TEST STATS
+    ───────────────────────────────────────── */
+    .test-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+
+    .test-stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .test-stat-icon {
+      width: 36px; height: 36px;
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .test-stat-icon svg { width: 18px; height: 18px; }
+
+    .test-stat-num {
+      font-size: 24px;
+      font-weight: 800;
+      font-family: var(--mono);
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+
+    .test-stat-label { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+
+    /* ─────────────────────────────────────────
+       QUERY CARDS
+    ───────────────────────────────────────── */
+    .query-list { display: flex; flex-direction: column; gap: 16px; }
+
+    .query-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .query-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-alt);
+    }
+
+    .query-num {
+      width: 28px; height: 28px;
+      border-radius: var(--radius-sm);
+      background: var(--red);
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-family: var(--mono);
+    }
+
+    .query-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+    .query-sub   { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+
+    .query-body  { padding: 20px; }
+
+    .result-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      color: #166534;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-top: 14px;
+    }
+
+    .result-note svg { width: 13px; height: 13px; }
+
+    /* ─────────────────────────────────────────
+       PROGRESS BARS
+    ───────────────────────────────────────── */
+    .prog-item { margin-bottom: 10px; }
+    .prog-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-secondary); margin-bottom: 5px; }
+    .prog-label strong { font-weight: 600; color: var(--text-primary); }
+    .prog-track { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .prog-fill  { height: 100%; background: var(--red); border-radius: 3px; }
+
+    /* ─────────────────────────────────────────
+       DIVIDER
+    ───────────────────────────────────────── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 32px 0;
+    }
+
+    /* ─────────────────────────────────────────
+       INFO BLOCK
+    ───────────────────────────────────────── */
+    .info-block {
+      display: flex;
+      gap: 12px;
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      font-size: 13px;
+      color: #1E40AF;
+      margin-top: 16px;
+    }
+
+    .info-block svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    /* ─────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .sidebar { transform: translateX(-100%); transition: transform .25s; }
+      .sidebar.open { transform: translateX(0); }
+      .content { margin-left: 0; }
+      .test-stats { grid-template-columns: repeat(2, 1fr); }
+      .cron-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .page { padding: 24px 16px; }
+      .topbar { padding: 0 16px; }
+      .hero-block { padding: 32px 24px; }
+      .card-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     SIDEBAR
+════════════════════════════════════════ -->
+<aside class="sidebar" id="sidebar">
+
+  <div class="sidebar-logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7" rx="1"/>
+        <rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/>
+        <rect x="14" y="14" width="7" height="7" rx="1"/>
+      </svg>
+    </div>
+    <div class="logo-text">
+      Huawei Tech Test
+      <span>Technical Interview</span>
+    </div>
+  </div>
+
+  <nav style="flex:1">
+    <div class="nav-group">
+      <div class="nav-group-label">Documentation</div>
+
+      <a href="#overview" class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        Overview
+      </a>
+
+      <a href="#task1" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <line x1="8" y1="21" x2="16" y2="21"/>
+          <line x1="12" y1="17" x2="12" y2="21"/>
+        </svg>
+        Task 1 — Backend
+        <span class="nav-badge">4 EP</span>
+      </a>
+
+      <a href="#task2" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        Task 2 — Automation
+        <span class="nav-badge">2 SH</span>
+      </a>
+
+      <a href="#task3" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="12" cy="5" rx="9" ry="3"/>
+          <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+          <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+        </svg>
+        Task 3 — SQL
+        <span class="nav-badge">5 QR</span>
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Testing</div>
+
+      <a href="#testing" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v11m0 0H5a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2h-4m-5 0h5"/>
+        </svg>
+        Playwright Tests
+        <span class="nav-badge">54</span>
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Reference</div>
+
+      <a href="#structure" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/>
+        </svg>
+        Struktur Proyek
+      </a>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-footer-text">
+      Huawei Proprietary<br/>
+      Restricted Distribution<br/>
+      2025
+    </div>
+  </div>
+
+</aside>
+
+<!-- ════════════════════════════════════════
+     MAIN
+════════════════════════════════════════ -->
+<div class="content">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-breadcrumb">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/>
+      </svg>
+      Interview Task
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px">
+        <polyline points="9 18 15 12 9 6"/>
+      </svg>
+      <strong>Documentation</strong>
+    </div>
+    <div class="topbar-meta">
+      <div class="meta-pill">
+        <div class="status-dot"></div>
+        All Tasks Completed
+      </div>
+      <div class="meta-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        2025-04-30
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+  <div class="page">
+
+    <!-- ──────────────────────────────────────
+         HERO
+    ────────────────────────────────────── -->
+    <div class="hero-block">
+      <div class="hero-tag">
+        <div class="hero-tag-dot"></div>
+        Technical Interview Documentation
+      </div>
+      <h1 class="hero-title">
+        Huawei Technical<br/>
+        Test <span class="accent">I Dev</span>
+      </h1>
+      <p class="hero-subtitle">
+        Implementasi lengkap Backend API, Automation Scripts, SQL Data Processing,
+        dan automated testing menggunakan Playwright dalam satu repositori Git.
+      </p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num">3<span>x</span></div>
+          <div class="hero-stat-label">Tasks</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">54</div>
+          <div class="hero-stat-label">Test Cases</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">4</div>
+          <div class="hero-stat-label">API Endpoints</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">5</div>
+          <div class="hero-stat-label">SQL Queries</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">2</div>
+          <div class="hero-stat-label">Cron Scripts</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ──────────────────────────────────────
+         OVERVIEW
+    ────────────────────────────────────── -->
+    <section class="section" id="overview">
+      <div class="section-header">
+        <div class="section-eyebrow">
+          <div class="section-eyebrow-dot" style="background:var(--text-muted)"></div>
+          Gambaran Umum
+        </div>
+        <h2 class="section-title">Ringkasan Semua Task</h2>
+        <p class="section-desc">
+          Tiga tugas teknis yang dikerjakan dalam satu repositori Git terstruktur,
+          dilengkapi dokumentasi, README, dan automated test suite.
+        </p>
+      </div>
+
+      <div class="card-grid">
+
+        <div class="card task-card">
+          <div class="task-card-accent" style="background:var(--blue)"></div>
+          <div class="task-card-inner">
+            <div class="task-card-head">
+              <div class="task-icon" style="background:#EFF6FF">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="3" width="20" height="14" rx="2"/>
+                  <line x1="8" y1="21" x2="16" y2="21"/>
+                  <line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
+              </div>
+              <div>
+                <div class="task-card-title">Task 1 — Backend</div>
+                <div class="task-card-sub">Node.js + Express</div>
+              </div>
+            </div>
+            <p class="task-card-desc">
+              Server REST API yang menerima data formulir dari frontend,
+              menyimpan ke in-memory storage, dan mengembalikannya kembali.
+            </p>
+            <div class="tag-row">
+              <span class="tag" style="background:#EFF6FF;color:#1D4ED8;border-color:#BFDBFE">Node.js</span>
+              <span class="tag" style="background:#F0FDF4;color:#166534;border-color:#BBF7D0">Express</span>
+              <span class="tag" style="background:#FFF7ED;color:#9A3412;border-color:#FED7AA">REST API</span>
+            </div>
+            <ul class="checklist">
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>POST, GET, GET/:id, DELETE endpoint</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>In-memory array storage</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>Frontend HTML untuk testing</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card task-card">
+          <div class="task-card-accent" style="background:var(--green)"></div>
+          <div class="task-card-inner">
+            <div class="task-card-head">
+              <div class="task-icon" style="background:#F0FDF4">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+              </div>
+              <div>
+                <div class="task-card-title">Task 2 — Automation</div>
+                <div class="task-card-sub">Bash + Cron Job</div>
+              </div>
+            </div>
+            <p class="task-card-desc">
+              Skrip otomatis pengumpulan data CSV 3 kali sehari dan pembersihan
+              file lama lebih dari 30 hari secara terjadwal.
+            </p>
+            <div class="tag-row">
+              <span class="tag" style="background:#F0FDF4;color:#166534;border-color:#BBF7D0">Bash</span>
+              <span class="tag" style="background:#EFF6FF;color:#1D4ED8;border-color:#BFDBFE">Cron Tab</span>
+              <span class="tag" style="background:#FFF7ED;color:#9A3412;border-color:#FED7AA">CSV</span>
+            </div>
+            <ul class="checklist">
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>collect_data.sh — 08:00, 12:00, 15:00 WIB</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>clean_data.sh — hapus file &gt;30 hari</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>setup_cron.sh — instalasi otomatis</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card task-card">
+          <div class="task-card-accent" style="background:var(--orange)"></div>
+          <div class="task-card-inner">
+            <div class="task-card-head">
+              <div class="task-icon" style="background:#FFF7ED">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                  <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                  <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                </svg>
+              </div>
+              <div>
+                <div class="task-card-title">Task 3 — SQL</div>
+                <div class="task-card-sub">Data Processing</div>
+              </div>
+            </div>
+            <p class="task-card-desc">
+              Pengelolaan database karyawan menggunakan SQL dengan INSERT,
+              UPDATE, agregasi, sorting, dan subquery.
+            </p>
+            <div class="tag-row">
+              <span class="tag" style="background:#EFF6FF;color:#1D4ED8;border-color:#BFDBFE">SQL</span>
+              <span class="tag" style="background:#FFF7ED;color:#9A3412;border-color:#FED7AA">SQLite</span>
+              <span class="tag" style="background:#F5F3FF;color:#6D28D9;border-color:#DDD6FE">Subquery</span>
+            </div>
+            <ul class="checklist">
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>INSERT, UPDATE, SUM, ORDER BY, Subquery</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>schema.sql + queries.sql terpisah</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>Compatible SQLite / MySQL / PostgreSQL</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────────────
+         TASK 1
+    ────────────────────────────────────── -->
+    <section class="section" id="task1">
+      <div class="section-header">
+        <div class="section-eyebrow">
+          <div class="section-eyebrow-dot" style="background:var(--blue)"></div>
+          Task 1
+        </div>
+        <h2 class="section-title">Pengembangan Backend</h2>
+        <p class="section-desc">
+          Server sederhana menggunakan Node.js dan Express dengan empat endpoint REST API
+          untuk mengelola data formulir secara in-memory.
+        </p>
+      </div>
+
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-body">
+          <div style="font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px">API Endpoints</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th>Endpoint</th>
+                  <th>Deskripsi</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="method method-get">GET</span></td>
+                  <td><code>/</code></td>
+                  <td>Health check dan daftar endpoint</td>
+                  <td style="color:var(--green);font-weight:600;font-size:12px;font-family:var(--mono)">200 OK</td>
+                </tr>
+                <tr>
+                  <td><span class="method method-post">POST</span></td>
+                  <td><code>/api/form</code></td>
+                  <td>Simpan data formulir baru ke storage</td>
+                  <td style="color:var(--green);font-weight:600;font-size:12px;font-family:var(--mono)">201 Created</td>
+                </tr>
+                <tr>
+                  <td><span class="method method-get">GET</span></td>
+                  <td><code>/api/data</code></td>
+                  <td>Ambil semua data yang tersimpan</td>
+                  <td style="color:var(--green);font-weight:600;font-size:12px;font-family:var(--mono)">200 OK</td>
+                </tr>
+                <tr>
+                  <td><span class="method method-get">GET</span></td>
+                  <td><code>/api/data/:id</code></td>
+                  <td>Ambil satu data berdasarkan ID</td>
+                  <td style="color:var(--text-muted);font-weight:600;font-size:12px;font-family:var(--mono)">200 / 404</td>
+                </tr>
+                <tr>
+                  <td><span class="method method-delete">DELETE</span></td>
+                  <td><code>/api/data/:id</code></td>
+                  <td>Hapus data berdasarkan ID</td>
+                  <td style="color:var(--text-muted);font-weight:600;font-size:12px;font-family:var(--mono)">200 / 404</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-header-dots">
+            <div class="code-dot code-dot-r"></div>
+            <div class="code-dot code-dot-y"></div>
+            <div class="code-dot code-dot-g"></div>
+          </div>
+          <div class="code-label">task1-backend / server.js</div>
+        </div>
+        <div class="code-body"><span class="cm">// In-memory storage</span>
+<span class="kw">const</span> <span class="var">dataStore</span> <span class="op">=</span> []
+
+<span class="cm">// POST /api/form — Simpan data formulir</span>
+<span class="var">app</span>.<span class="fn">post</span>(<span class="str">'/api/form'</span>, (req, res) <span class="op">=></span> {
+  <span class="kw">const</span> <span class="var">entry</span> <span class="op">=</span> {
+    id:        <span class="var">dataStore</span>.length <span class="op">+</span> <span class="num">1</span>,
+    ...req.body,
+    createdAt: <span class="kw">new</span> <span class="fn">Date</span>().<span class="fn">toISOString</span>()
+  }
+  <span class="var">dataStore</span>.<span class="fn">push</span>(<span class="var">entry</span>)
+  res.<span class="fn">status</span>(<span class="num">201</span>).<span class="fn">json</span>({ success: <span class="kw">true</span>, data: <span class="var">entry</span> })
+})
+
+<span class="cm">// GET /api/data — Kembalikan semua data</span>
+<span class="var">app</span>.<span class="fn">get</span>(<span class="str">'/api/data'</span>, (req, res) <span class="op">=></span> {
+  res.<span class="fn">json</span>({ success: <span class="kw">true</span>, total: <span class="var">dataStore</span>.length, data: <span class="var">dataStore</span> })
+})</div>
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────────────
+         TASK 2
+    ────────────────────────────────────── -->
+    <section class="section" id="task2">
+      <div class="section-header">
+        <div class="section-eyebrow">
+          <div class="section-eyebrow-dot" style="background:var(--green)"></div>
+          Task 2
+        </div>
+        <h2 class="section-title">Automation Testing</h2>
+        <p class="section-desc">
+          Dua skrip Bash yang dijadwalkan via cron: pengumpulan data CSV secara periodik
+          dan pembersihan otomatis file yang sudah lebih dari sebulan.
+        </p>
+      </div>
+
+      <div class="cron-grid">
+        <div class="cron-card">
+          <div class="cron-time">08<span>:00</span></div>
+          <div class="cron-label">WIB — Collect #1</div>
+        </div>
+        <div class="cron-card">
+          <div class="cron-time">12<span>:00</span></div>
+          <div class="cron-label">WIB — Collect #2</div>
+        </div>
+        <div class="cron-card">
+          <div class="cron-time">15<span>:00</span></div>
+          <div class="cron-label">WIB — Collect #3</div>
+        </div>
+      </div>
+
+      <div class="card-grid" style="margin-top:16px">
+        <div class="card">
+          <div class="card-body">
+            <div style="font-size:13px;font-weight:700;margin-bottom:6px">collect_data.sh</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px">Dijadwalkan 08:00, 12:00, 15:00 WIB</div>
+            <ul class="checklist">
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>Panggil <code>GET /api/data</code> dari backend</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>Konversi JSON ke CSV via Python</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>Simpan ke <code>/home/cron/</code></li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>Log setiap eksekusi</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <div style="font-size:13px;font-weight:700;margin-bottom:6px">clean_data.sh</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px">Dijadwalkan setiap hari 00:00 WIB</div>
+            <ul class="checklist">
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>Scan semua <code>cron_*.csv</code> di path</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>Hapus file dengan <code>mtime &gt; 30 hari</code></li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>File lain tidak tersentuh</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>Log nama file dan ukuran yang dihapus</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-wrap" style="margin-top:16px">
+        <div class="code-header">
+          <div class="code-header-dots">
+            <div class="code-dot code-dot-r"></div>
+            <div class="code-dot code-dot-y"></div>
+            <div class="code-dot code-dot-g"></div>
+          </div>
+          <div class="code-label">task2-automation / collect_data.sh — crontab entry</div>
+        </div>
+        <div class="code-body"><span class="cm"># Cron entries — tambahkan via: crontab -e</span>
+
+<span class="cm"># collect_data: 08:00, 12:00, 15:00 WIB (UTC+7 → UTC 01:00, 05:00, 08:00)</span>
+<span class="sh-kw">0</span> 1,5,8 * * *  /home/cron/collect_data.sh >> /home/cron/collect.log 2>&1
+
+<span class="cm"># clean_data: 00:00 WIB setiap hari (UTC 17:00)</span>
+<span class="sh-kw">0</span> 17   * * *  /home/cron/clean_data.sh   >> /home/cron/clean.log   2>&1</div>
+      </div>
+
+      <div class="info-block">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        Format nama file output: <strong style="font-family:var(--mono);margin-left:4px">cron_DDMMYYYY_HH.MM.csv</strong>
+        &nbsp;&mdash;&nbsp; Contoh: <strong style="font-family:var(--mono)">cron_19122024_15.00.csv</strong>
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────────────
+         TASK 3
+    ────────────────────────────────────── -->
+    <section class="section" id="task3">
+      <div class="section-header">
+        <div class="section-eyebrow">
+          <div class="section-eyebrow-dot" style="background:var(--orange)"></div>
+          Task 3
+        </div>
+        <h2 class="section-title">Data Processing — SQL</h2>
+        <p class="section-desc">
+          Lima query SQL untuk mengelola tabel employee: insert, update bulk,
+          agregasi, sorting, dan subquery filtering.
+        </p>
+      </div>
+
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-body">
+          <div style="font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px">Tabel Employee — Data Awal</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th><th>Position</th><th>Join Date</th><th>Release Date</th><th>Year of Exp</th><th>Salary</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight:600">Jacky</td>
+                  <td><span class="pos-badge" style="background:#EFF6FF;color:#1E40AF">Solution Architect</span></td>
+                  <td style="font-family:var(--mono);font-size:12px">2018-07-25</td>
+                  <td style="font-family:var(--mono);font-size:12px">2022-07-25</td>
+                  <td style="font-family:var(--mono)">8.0</td>
+                  <td style="font-family:var(--mono);font-weight:600">$150</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600">John</td>
+                  <td><span class="pos-badge" style="background:#F0FDF4;color:#166534">Asst. Manager</span></td>
+                  <td style="font-family:var(--mono);font-size:12px">2016-02-02</td>
+                  <td style="font-family:var(--mono);font-size:12px">2021-02-02</td>
+                  <td style="font-family:var(--mono)">12.0</td>
+                  <td style="font-family:var(--mono);font-weight:600">$155</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600">Alano</td>
+                  <td><span class="pos-badge" style="background:#FFF7ED;color:#9A3412">Manager</span></td>
+                  <td style="font-family:var(--mono);font-size:12px">2010-11-09</td>
+                  <td style="color:var(--text-muted)">—</td>
+                  <td style="font-family:var(--mono)">14.0</td>
+                  <td style="font-family:var(--mono);font-weight:600">$175</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600">Aaron</td>
+                  <td><span class="pos-badge" style="background:#FFF0F2;color:#9F1239">Engineer</span></td>
+                  <td style="font-family:var(--mono);font-size:12px">2021-08-16</td>
+                  <td style="font-family:var(--mono);font-size:12px">2022-08-16</td>
+                  <td style="font-family:var(--mono)">1.0</td>
+                  <td style="font-family:var(--mono);font-weight:600">$80</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600">Allen</td>
+                  <td><span class="pos-badge" style="background:#FFF0F2;color:#9F1239">Engineer</span></td>
+                  <td style="font-family:var(--mono);font-size:12px">2024-06-06</td>
+                  <td style="color:var(--text-muted)">—</td>
+                  <td style="font-family:var(--mono)">4.0</td>
+                  <td style="font-family:var(--mono);font-weight:600">$75</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600">Peter</td>
+                  <td><span class="pos-badge" style="background:#F5F3FF;color:#5B21B6">Team Leader</span></td>
+                  <td style="font-family:var(--mono);font-size:12px">2020-01-09</td>
+                  <td style="color:var(--text-muted)">—</td>
+                  <td style="font-family:var(--mono)">3.0</td>
+                  <td style="font-family:var(--mono);font-weight:600">$85</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="query-list">
+
+        <!-- Q1 -->
+        <div class="query-card">
+          <div class="query-head">
+            <div class="query-num">01</div>
+            <div>
+              <div class="query-title">INSERT — Tambah Employee Baru</div>
+              <div class="query-sub">Albert, Engineer, 24 Jan 2024, 2.5 year exp, salary $50</div>
+            </div>
+          </div>
+          <div class="query-body">
+            <div class="code-wrap">
+              <div class="code-header">
+                <div class="code-header-dots"><div class="code-dot code-dot-r"></div><div class="code-dot code-dot-y"></div><div class="code-dot code-dot-g"></div></div>
+                <div class="code-label">SQL</div>
+              </div>
+              <div class="code-body"><span class="sql-kw">INSERT INTO</span> employee (name, position, join_date, year_of_exp, salary)
+<span class="sql-kw">VALUES</span> (<span class="str">'Albert'</span>, <span class="str">'Engineer'</span>, <span class="str">'2024-01-24'</span>, <span class="num">2.5</span>, <span class="num">50.00</span>);</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="query-card">
+          <div class="query-head">
+            <div class="query-num">02</div>
+            <div>
+              <div class="query-title">UPDATE — Salary Semua Engineer</div>
+              <div class="query-sub">Aaron, Allen, Albert diupdate ke $85</div>
+            </div>
+          </div>
+          <div class="query-body">
+            <div class="code-wrap">
+              <div class="code-header">
+                <div class="code-header-dots"><div class="code-dot code-dot-r"></div><div class="code-dot code-dot-y"></div><div class="code-dot code-dot-g"></div></div>
+                <div class="code-label">SQL</div>
+              </div>
+              <div class="code-body"><span class="sql-kw">UPDATE</span> employee
+<span class="sql-kw">SET</span>    salary <span class="op">=</span> <span class="num">85.00</span>
+<span class="sql-kw">WHERE</span>  <span class="sql-fn">LOWER</span>(position) <span class="op">=</span> <span class="str">'engineer'</span>;</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="query-card">
+          <div class="query-head">
+            <div class="query-num">03</div>
+            <div>
+              <div class="query-title">SUM — Total Pengeluaran Salary Tahun 2021</div>
+              <div class="query-sub">Karyawan aktif: join &le; 31-Des-2021 dan release &ge; 1-Jan-2021 (atau masih aktif)</div>
+            </div>
+          </div>
+          <div class="query-body">
+            <div class="code-wrap">
+              <div class="code-header">
+                <div class="code-header-dots"><div class="code-dot code-dot-r"></div><div class="code-dot code-dot-y"></div><div class="code-dot code-dot-g"></div></div>
+                <div class="code-label">SQL</div>
+              </div>
+              <div class="code-body"><span class="sql-kw">SELECT</span> <span class="sql-fn">SUM</span>(salary) <span class="sql-kw">AS</span> total_salary_2021
+<span class="sql-kw">FROM</span>   employee
+<span class="sql-kw">WHERE</span>  join_date <span class="op">&lt;=</span> <span class="str">'2021-12-31'</span>
+  <span class="sql-kw">AND</span>  (release_date <span class="sql-kw">IS NULL</span> <span class="sql-kw">OR</span> release_date <span class="op">&gt;=</span> <span class="str">'2021-01-01'</span>);</div>
+            </div>
+            <div class="result-note">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Aktif di 2021: Jacky + John + Alano + Aaron + Peter &nbsp;=&nbsp; <strong>$645</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="query-card">
+          <div class="query-head">
+            <div class="query-num">04</div>
+            <div>
+              <div class="query-title">ORDER BY — TOP 3 Year of Experience</div>
+              <div class="query-sub">Descending, ambil 3 teratas</div>
+            </div>
+          </div>
+          <div class="query-body">
+            <div class="code-wrap">
+              <div class="code-header">
+                <div class="code-header-dots"><div class="code-dot code-dot-r"></div><div class="code-dot code-dot-y"></div><div class="code-dot code-dot-g"></div></div>
+                <div class="code-label">SQL</div>
+              </div>
+              <div class="code-body"><span class="sql-kw">SELECT</span> name, position, year_of_exp, salary
+<span class="sql-kw">FROM</span>   employee
+<span class="sql-kw">ORDER BY</span> year_of_exp <span class="sql-kw">DESC</span>
+<span class="sql-kw">LIMIT</span>  <span class="num">3</span>;</div>
+            </div>
+            <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px">
+              <div class="prog-item">
+                <div class="prog-label"><strong>#1 &nbsp;Alano (Manager)</strong><span style="font-family:var(--mono)">14 yr</span></div>
+                <div class="prog-track"><div class="prog-fill" style="width:100%"></div></div>
+              </div>
+              <div class="prog-item">
+                <div class="prog-label"><strong>#2 &nbsp;John (Asst. Manager)</strong><span style="font-family:var(--mono)">12 yr</span></div>
+                <div class="prog-track"><div class="prog-fill" style="width:85%"></div></div>
+              </div>
+              <div class="prog-item">
+                <div class="prog-label"><strong>#3 &nbsp;Jacky (Solution Architect)</strong><span style="font-family:var(--mono)">8 yr</span></div>
+                <div class="prog-track"><div class="prog-fill" style="width:57%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="query-card">
+          <div class="query-head">
+            <div class="query-num">05</div>
+            <div>
+              <div class="query-title">SUBQUERY — Engineer dengan Experience &le; 3 Tahun</div>
+              <div class="query-sub">Menggunakan WHERE id IN (subquery)</div>
+            </div>
+          </div>
+          <div class="query-body">
+            <div class="code-wrap">
+              <div class="code-header">
+                <div class="code-header-dots"><div class="code-dot code-dot-r"></div><div class="code-dot code-dot-y"></div><div class="code-dot code-dot-g"></div></div>
+                <div class="code-label">SQL</div>
+              </div>
+              <div class="code-body"><span class="sql-kw">SELECT</span> id, name, position, year_of_exp, salary
+<span class="sql-kw">FROM</span>   employee
+<span class="sql-kw">WHERE</span>  id <span class="sql-kw">IN</span> (
+    <span class="sql-kw">SELECT</span> id <span class="sql-kw">FROM</span> employee
+    <span class="sql-kw">WHERE</span>  <span class="sql-fn">LOWER</span>(position) <span class="op">=</span> <span class="str">'engineer'</span>
+      <span class="sql-kw">AND</span>  year_of_exp <span class="op">&lt;=</span> <span class="num">3.0</span>
+)
+<span class="sql-kw">ORDER BY</span> year_of_exp <span class="sql-kw">ASC</span>;</div>
+            </div>
+            <div class="result-note">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Masuk: Aaron (1 yr), Albert (2.5 yr) &nbsp;&mdash;&nbsp; Dikecualikan: Allen (4 yr)
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────────────
+         PLAYWRIGHT TESTS
+    ────────────────────────────────────── -->
+    <section class="section" id="testing">
+      <div class="section-header">
+        <div class="section-eyebrow">
+          <div class="section-eyebrow-dot" style="background:var(--purple)"></div>
+          Playwright Tests
+        </div>
+        <h2 class="section-title">Automated Test Suite</h2>
+        <p class="section-desc">
+          54 test cases mencakup API endpoint, logika script automation, dan
+          seluruh query SQL — dijalankan otomatis via Playwright.
+        </p>
+      </div>
+
+      <div class="test-stats">
+        <div class="test-stat">
+          <div class="test-stat-icon" style="background:#EFF6FF">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </div>
+          <div>
+            <div class="test-stat-num" style="color:var(--blue)">13</div>
+            <div class="test-stat-label">Task 1 — API</div>
+          </div>
+        </div>
+        <div class="test-stat">
+          <div class="test-stat-icon" style="background:#F0FDF4">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <div>
+            <div class="test-stat-num" style="color:var(--green)">18</div>
+            <div class="test-stat-label">Task 2 — Scripts</div>
+          </div>
+        </div>
+        <div class="test-stat">
+          <div class="test-stat-icon" style="background:#FFF7ED">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/>
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+            </svg>
+          </div>
+          <div>
+            <div class="test-stat-num" style="color:var(--orange)">23</div>
+            <div class="test-stat-label">Task 3 — SQL</div>
+          </div>
+        </div>
+        <div class="test-stat" style="border-color:#DDD6FE">
+          <div class="test-stat-icon" style="background:#F5F3FF">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v11m0 0H5a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2h-4m-5 0h5"/>
+            </svg>
+          </div>
+          <div>
+            <div class="test-stat-num" style="color:var(--purple)">54</div>
+            <div class="test-stat-label">Total</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-grid">
+
+        <div class="card">
+          <div class="card-body">
+            <div style="font-size:13px;font-weight:700;margin-bottom:4px">task1.spec.js</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:14px;font-family:var(--mono)">13 test cases</div>
+            <ul class="checklist">
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>GET / health check &amp; endpoint list</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>POST valid data &rarr; 201</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>POST kosong &rarr; 400</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>createdAt format ISO 8601</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>ID unik dan bertambah</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>GET/:id benar &amp; 404 jika tidak ada</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>DELETE berhasil &amp; 404 setelahnya</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <div style="font-size:13px;font-weight:700;margin-bottom:4px">task2.spec.js</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:14px;font-family:var(--mono)">18 test cases</div>
+            <ul class="checklist">
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>Format nama file cron_DDMMYYYY_HH.MM.csv</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>3 file terpisah per jadwal harian</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>Header &amp; baris CSV valid</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>File &gt;30 hari dihapus</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>File &lt;30 hari dipertahankan</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>Skenario campuran old/new files</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>Keberadaan file .sh dikonfirmasi</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <div style="font-size:13px;font-weight:700;margin-bottom:4px">task3.spec.js</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:14px;font-family:var(--mono)">23 test cases</div>
+            <ul class="checklist">
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>Schema: tabel &amp; 6 kolom terbuat</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>6 data awal tersimpan</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>Q1: INSERT Albert semua field valid</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>Q2: UPDATE Engineer &rarr; salary 85</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>Q3: 5 aktif di 2021, total $645</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>Q4: TOP 3 urutan benar</li>
+              <li><span class="check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></span>Q5: Allen (4 yr) dikecualikan</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="code-wrap" style="margin-top:16px">
+        <div class="code-header">
+          <div class="code-header-dots">
+            <div class="code-dot code-dot-r"></div>
+            <div class="code-dot code-dot-y"></div>
+            <div class="code-dot code-dot-g"></div>
+          </div>
+          <div class="code-label">Terminal — menjalankan test</div>
+        </div>
+        <div class="code-body"><span class="cm"># Install semua dependensi</span>
+<span class="sh-cmd">npm</span> install
+<span class="sh-cmd">npx</span> playwright install
+
+<span class="cm"># Jalankan semua test</span>
+<span class="sh-cmd">npm</span> test
+
+<span class="cm"># Jalankan per task</span>
+<span class="sh-cmd">npm</span> run test:task1
+<span class="sh-cmd">npm</span> run test:task2
+<span class="sh-cmd">npm</span> run test:task3
+
+<span class="cm"># Buka HTML report</span>
+<span class="sh-cmd">npm</span> run test:report</div>
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────────────
+         STRUCTURE
+    ────────────────────────────────────── -->
+    <section class="section" id="structure">
+      <div class="section-header">
+        <div class="section-eyebrow">
+          <div class="section-eyebrow-dot" style="background:var(--text-muted)"></div>
+          Referensi
+        </div>
+        <h2 class="section-title">Struktur Proyek</h2>
+        <p class="section-desc">
+          Seluruh kode tersimpan dalam satu repositori Git dengan direktori per task
+          dan test suite terpusat di folder <code>tests/</code>.
+        </p>
+      </div>
+
+      <div class="file-tree">
+<span class="ft-dir">Interview_task/</span>
+<span class="ft-dim">├── </span><span class="ft-dir">task1-backend/</span>
+<span class="ft-dim">│   ├── </span><span class="ft-js">server.js</span><span class="ft-dim">          Express server — 4 REST endpoint</span>
+<span class="ft-dim">│   ├── </span><span class="ft-html">index.html</span><span class="ft-dim">         Frontend formulir untuk testing manual</span>
+<span class="ft-dim">│   └── </span><span class="ft-json">package.json</span><span class="ft-dim">       express, cors</span>
+<span class="ft-dim">│</span>
+<span class="ft-dim">├── </span><span class="ft-dir">task2-automation/</span>
+<span class="ft-dim">│   ├── </span><span class="ft-sh">collect_data.sh</span><span class="ft-dim">    Cron job: collect CSV 3x/hari</span>
+<span class="ft-dim">│   ├── </span><span class="ft-sh">clean_data.sh</span><span class="ft-dim">      Cron job: hapus file &gt;30 hari</span>
+<span class="ft-dim">│   └── </span><span class="ft-sh">setup_cron.sh</span><span class="ft-dim">      Helper: daftarkan kedua cron sekaligus</span>
+<span class="ft-dim">│</span>
+<span class="ft-dim">├── </span><span class="ft-dir">task3-sql/</span>
+<span class="ft-dim">│   ├── </span><span class="ft-sql">schema.sql</span><span class="ft-dim">         CREATE TABLE + data awal (6 rows)</span>
+<span class="ft-dim">│   └── </span><span class="ft-sql">queries.sql</span><span class="ft-dim">        5 query: INSERT / UPDATE / SUM / ORDER BY / Subquery</span>
+<span class="ft-dim">│</span>
+<span class="ft-dim">├── </span><span class="ft-dir">tests/</span>
+<span class="ft-dim">│   ├── </span><span class="ft-js">task1.spec.js</span><span class="ft-dim">      13 API tests</span>
+<span class="ft-dim">│   ├── </span><span class="ft-js">task2.spec.js</span><span class="ft-dim">      18 automation tests (cross-platform)</span>
+<span class="ft-dim">│   └── </span><span class="ft-js">task3.spec.js</span><span class="ft-dim">      23 SQL tests (better-sqlite3 in-memory)</span>
+<span class="ft-dim">│</span>
+<span class="ft-dim">├── </span><span class="ft-js">playwright.config.js</span><span class="ft-dim">   Config + auto-start server Task 1</span>
+<span class="ft-dim">├── </span><span class="ft-json">package.json</span><span class="ft-dim">           Root: @playwright/test, better-sqlite3</span>
+<span class="ft-dim">├── </span><span class="ft-bat">upload_to_github.bat</span><span class="ft-dim">   Script upload ke GitHub (Windows)</span>
+<span class="ft-dim">└── </span><span class="ft-html">documentation.html</span><span class="ft-dim">     File ini</span>
+      </div>
+    </section>
+
+  </div><!-- .page -->
+</div><!-- .content -->
+
+<script>
+  // ── Active nav highlight on scroll ──────────────────
+  const sections = document.querySelectorAll('section[id]');
+  const navItems  = document.querySelectorAll('.nav-item[href]');
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        navItems.forEach((n) => {
+          n.classList.toggle('active', n.getAttribute('href') === '#' + e.target.id);
+        });
+      }
+    });
+  }, { rootMargin: '-10% 0px -80% 0px' });
+
+  sections.forEach((s) => io.observe(s));
+</script>
+
+</body>
+</html>
